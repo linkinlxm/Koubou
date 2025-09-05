@@ -747,8 +747,6 @@ class TextRenderer:
 
             # Add padding to prevent edge artifacts during rotation
             padding = max(text_width, text_height) // 4
-            padded_width = text_width + 2 * padding
-            padded_height = text_height + 2 * padding
 
             # Extract text region with padding
             text_region_bounds = (
@@ -805,7 +803,7 @@ class TextRenderer:
                 canvas.putdata(canvas_array)
             else:
                 logger.warning(
-                    f"Rotated text extends beyond canvas bounds, clipping may occur"
+                    "Rotated text extends beyond canvas bounds, clipping may occur"
                 )
                 temp_canvas.paste(rotated_text, (paste_x, paste_y), rotated_text)
                 canvas = Image.alpha_composite(canvas, temp_canvas)
