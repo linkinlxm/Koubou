@@ -386,7 +386,7 @@ class ProjectConfig(BaseModel):
 
     project: ProjectInfo = Field(..., description="Project information")
     devices: List[str] = Field(
-        default=["iPhone 15 Pro Portrait"], description="Target devices"
+        default=["iPhone 15 - Black - Portrait"], description="Target devices"
     )
     defaults: Optional[Dict] = Field(default=None, description="Default settings")
     localization: Optional[LocalizationConfig] = Field(

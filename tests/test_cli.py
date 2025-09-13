@@ -78,7 +78,7 @@ class TestCLI:
                 "name": "CLI Test Project",
                 "output_dir": str(self.temp_dir / "output"),
             },
-            "devices": ["iPhone 15 Pro Portrait"],
+            "devices": ["iPhone 15 - Black - Portrait"],
             "screenshots": {
                 "cli_test_screenshot": {
                     "content": [
@@ -146,7 +146,7 @@ class TestCLI:
                 "name": "Output Dir Test",
                 "output_dir": str(self.temp_dir / "yaml_output"),
             },
-            "devices": ["iPhone 15 Pro Portrait"],
+            "devices": ["iPhone 15 - Black - Portrait"],
             "screenshots": {
                 "test_screenshot": {
                     "content": [

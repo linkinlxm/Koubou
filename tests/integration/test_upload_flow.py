@@ -352,7 +352,8 @@ class TestConfigFileIntegration:
         # Create private key file
         key_file = tmp_path / "AuthKey_ROUND123.p8"
         key_file.write_text(
-            "-----BEGIN PRIVATE KEY-----\ntest_content\n-----END PRIVATE KEY-----"  # DUMMY KEY
+            "-----BEGIN PRIVATE KEY-----\ntest_content\n"
+            "-----END PRIVATE KEY-----"  # DUMMY KEY
         )
 
         # Create config file
@@ -385,7 +386,8 @@ class TestConfigFileIntegration:
         # Create private key file in same directory as config
         key_file = tmp_path / "AuthKey_REL123.p8"
         key_file.write_text(
-            "-----BEGIN PRIVATE KEY-----\ntest_content\n-----END PRIVATE KEY-----"  # DUMMY KEY
+            "-----BEGIN PRIVATE KEY-----\ntest_content\n"
+            "-----END PRIVATE KEY-----"  # DUMMY KEY
         )
 
         # Create config with relative path

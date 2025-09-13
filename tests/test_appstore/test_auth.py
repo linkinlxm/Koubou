@@ -22,7 +22,8 @@ class TestAppStoreCredentials:
         # Create a temporary private key file
         key_file = tmp_path / "test_key.p8"
         key_file.write_text(
-            "-----BEGIN PRIVATE KEY-----\ntest_key_content\n-----END PRIVATE KEY-----"  # DUMMY KEY
+            "-----BEGIN PRIVATE KEY-----\ntest_key_content\n"
+            "-----END PRIVATE KEY-----"  # DUMMY KEY
         )
 
         credentials = AppStoreCredentials(
@@ -52,7 +53,8 @@ class TestAppStoreCredentials:
         # Create temporary private key file
         key_file = tmp_path / "AuthKey_ABC123.p8"
         key_file.write_text(
-            "-----BEGIN PRIVATE KEY-----\ntest_content\n-----END PRIVATE KEY-----"  # DUMMY KEY
+            "-----BEGIN PRIVATE KEY-----\ntest_content\n"
+            "-----END PRIVATE KEY-----"  # DUMMY KEY
         )
 
         # Create config file

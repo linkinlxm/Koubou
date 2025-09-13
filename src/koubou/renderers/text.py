@@ -733,7 +733,7 @@ class TextRenderer:
     ) -> None:
         """Apply rotation to rendered text using post-processing approach.
 
-        This preserves all existing text quality features (gradients, strokes, anti-aliasing)
+        This preserves text quality features (gradients, strokes, anti-aliasing)
         by rotating the final rendered text image.
 
         Args:
@@ -768,7 +768,7 @@ class TextRenderer:
 
             # Rotate the extracted text region
             rotated_text = extracted_region.rotate(
-                -rotation_angle,  # Negative for clockwise rotation (PIL uses counter-clockwise)
+                -rotation_angle,  # Negative for clockwise rotation
                 resample=Image.Resampling.BICUBIC,  # Use BICUBIC for compatibility
                 expand=True,  # Expand bounds to prevent cropping
             )
@@ -798,7 +798,7 @@ class TextRenderer:
                 temp_canvas.paste(rotated_text, (paste_x, paste_y), rotated_text)
                 canvas = Image.alpha_composite(canvas, temp_canvas)
 
-                # Copy the result back to the original canvas (since canvas is modified in place)
+                # Copy result back to original canvas (modified in place)
                 canvas_array = list(canvas.getdata())
                 canvas.putdata(canvas_array)
             else:

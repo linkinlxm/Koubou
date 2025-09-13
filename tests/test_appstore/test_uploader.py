@@ -294,7 +294,8 @@ class TestScreenshotUploader:
         # Create dummy private key file
         key_file = tmp_path / "test_key.p8"
         key_file.write_text(
-            "-----BEGIN PRIVATE KEY-----\ntest_content\n-----END PRIVATE KEY-----"  # DUMMY KEY
+            "-----BEGIN PRIVATE KEY-----\ntest_content\n"
+            "-----END PRIVATE KEY-----"  # DUMMY KEY
         )
 
         return AppStoreCredentials(

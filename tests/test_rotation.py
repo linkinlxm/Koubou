@@ -354,11 +354,12 @@ class TestRotationIntegration:
         non_white_pixels = [p for p in pixels if p != (255, 255, 255, 255)]
         assert len(non_white_pixels) > 100, "Multiple rotated texts should render"
 
-        # After rotation, text pixels may be anti-aliased and mixed with background
-        # Just verify that sufficient non-white pixels exist (indicating text was rendered)
-        assert (
-            len(non_white_pixels) > 300
-        ), f"Should have enough text pixels after rotation, found {len(non_white_pixels)} non-white pixels"
+        # After rotation, text pixels may be anti-aliased and mixed
+        # Verify that sufficient non-white pixels exist (text was rendered)
+        assert len(non_white_pixels) > 300, (
+            f"Should have enough text pixels after rotation, "
+            f"found {len(non_white_pixels)} non-white pixels"
+        )
 
         # Verify that different areas of the canvas have text (multiple text elements)
         # Divide canvas into regions and check for non-white pixels in each

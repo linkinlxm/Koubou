@@ -589,7 +589,8 @@ def upload(
             if create_config:
                 _setup_appstore_credentials(appstore_config_path)
                 console.print(
-                    "\nℹ️ Setup complete! Run the upload command again to upload screenshots.",
+                    "\nℹ️ Setup complete! Run the upload command again to "
+                    "upload screenshots.",
                     style="blue",
                 )
                 raise typer.Exit(0)

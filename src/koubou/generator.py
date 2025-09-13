@@ -219,8 +219,8 @@ class ScreenshotGenerator:
         if rotation_angle != 0:
             logger.info(f"🔄 Rotating image by {rotation_angle}°")
             source_image = source_image.rotate(
-                -rotation_angle,  # Negative for clockwise rotation (PIL uses counter-clockwise)
-                resample=Image.Resampling.BICUBIC,  # Use BICUBIC instead of LANCZOS for compatibility
+                -rotation_angle,  # Negative for clockwise rotation
+                resample=Image.Resampling.BICUBIC,  # Use BICUBIC for compatibility
                 expand=True,  # Expand bounds to prevent cropping
             )
             # Update dimensions after rotation
@@ -417,15 +417,14 @@ class ScreenshotGenerator:
         logger.info(f"📁 Output directory: {project_config.project.output_dir}")
         logger.info(f"🎯 Screenshots to generate: {len(project_config.screenshots)}")
 
-        # Always use unified generation approach (handles both single and multi-language)
+        # Use unified generation approach (handles both single and multi-language)
         return self._generate_localized_project(project_config, config_dir)
-
 
     def _generate_localized_project(
         self, project_config: ProjectConfig, config_dir: Optional[Path] = None
     ) -> List[Path]:
         """Generate screenshots for all configured languages and devices."""
-        
+
         # Handle both localized and non-localized projects
         if project_config.localization:
             localization_config = project_config.localization
@@ -466,25 +465,28 @@ class ScreenshotGenerator:
         # Get defaults
         defaults = project_config.defaults or {}
         default_background = defaults.get("background")
-        
+
         # Get devices list (default to single device for backward compatibility)
-        devices = project_config.devices or ["iPhone 15 Pro Portrait"]
-        
+        devices = project_config.devices or ["iPhone 15 - Black - Portrait"]
+
         all_results = []
 
         # Generate screenshots for each device and language combination
         for device in devices:
             logger.info(f"📱 Processing device: {device}")
-            
+
             for language in languages:
-                logger.info(f"🌐 Generating screenshots for device: {device}, language: {language}")
+                logger.info(
+                    f"🌐 Generating screenshots for device: {device}, "
+                    f"language: {language}"
+                )
 
                 for i, (screenshot_id, screenshot_def) in enumerate(
                     project_config.screenshots.items(), 1
                 ):
                     logger.info(
-                        f"[{device}] [{language}] [{i}/{len(project_config.screenshots)}] "
-                        f"{screenshot_id}"
+                        f"[{device}] [{language}] "
+                        f"[{i}/{len(project_config.screenshots)}] {screenshot_id}"
                     )
                     try:
                         # Create localized content (or use original for non-localized)
@@ -492,8 +494,9 @@ class ScreenshotGenerator:
                             localized_content = content_resolver.localize_content_items(
                                 screenshot_def.content, language
                             )
-                            # Create a copy of screenshot definition with localized content
+                            # Create copy with localized content
                             from copy import deepcopy
+
                             processed_screenshot_def = deepcopy(screenshot_def)
                             processed_screenshot_def.content = localized_content
                         else:
@@ -503,7 +506,9 @@ class ScreenshotGenerator:
                         if localization_config:
                             # Multi-language: output_dir/language/device/
                             device_output_dir = str(
-                                Path(project_config.project.output_dir) / language / device.replace(" ", "_")
+                                Path(project_config.project.output_dir)
+                                / language
+                                / device.replace(" ", "_")
                             )
                         else:
                             # Single language: output_dir/
@@ -528,9 +533,10 @@ class ScreenshotGenerator:
                             )
                     except Exception as _e:
                         logger.error(
-                            f"Failed to generate {screenshot_id} for {device}/{language}: {_e}"
+                            f"Failed to generate {screenshot_id} for "
+                            f"{device}/{language}: {_e}"
                         )
-                        # Continue with next screenshot instead of failing entire project
+                        # Continue with next screenshot instead of failing project
                         continue
 
         logger.info(
@@ -600,8 +606,8 @@ class ScreenshotGenerator:
                 image_configs.append(image_config)
                 logger.info(
                     f"📏 Image: scale={image_scale * 100:.0f}%, "
-                    f"position={image_position}, frame={getattr(item, 'frame', False)}, "
-                    f"rotation={image_rotation}°"
+                    f"position={image_position}, "
+                    f"frame={getattr(item, 'frame', False)}, rotation={image_rotation}°"
                 )
                 # Continue processing more images instead of breaking
 
@@ -763,4 +769,3 @@ class ScreenshotGenerator:
             y = int(float(position[1]))
 
         return (x, y)
-

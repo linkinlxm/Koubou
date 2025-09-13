@@ -155,9 +155,9 @@ class TestLocalizedGeneration:
         assert ja_dir.exists()
 
         # Check screenshots exist in each language directory with device subdirectory
-        assert (en_dir / "iPhone_15_Pro_Portrait" / "welcome.png").exists()
-        assert (es_dir / "iPhone_15_Pro_Portrait" / "welcome.png").exists()
-        assert (ja_dir / "iPhone_15_Pro_Portrait" / "welcome.png").exists()
+        assert (en_dir / "iPhone_15_-_Black_-_Portrait" / "welcome.png").exists()
+        assert (es_dir / "iPhone_15_-_Black_-_Portrait" / "welcome.png").exists()
+        assert (ja_dir / "iPhone_15_-_Black_-_Portrait" / "welcome.png").exists()
 
     def test_localized_generation_multiple_screenshots(self):
         """Test localized generation with multiple screenshots."""
@@ -208,16 +208,16 @@ class TestLocalizedGeneration:
 
         # Check all combinations exist in device subdirectories
         assert (
-            self.output_dir / "en" / "iPhone_15_Pro_Portrait" / "welcome.png"
+            self.output_dir / "en" / "iPhone_15_-_Black_-_Portrait" / "welcome.png"
         ).exists()
         assert (
-            self.output_dir / "en" / "iPhone_15_Pro_Portrait" / "settings.png"
+            self.output_dir / "en" / "iPhone_15_-_Black_-_Portrait" / "settings.png"
         ).exists()
         assert (
-            self.output_dir / "es" / "iPhone_15_Pro_Portrait" / "welcome.png"
+            self.output_dir / "es" / "iPhone_15_-_Black_-_Portrait" / "welcome.png"
         ).exists()
         assert (
-            self.output_dir / "es" / "iPhone_15_Pro_Portrait" / "settings.png"
+            self.output_dir / "es" / "iPhone_15_-_Black_-_Portrait" / "settings.png"
         ).exists()
 
     def test_localized_generation_creates_xcstrings_when_missing(self):
@@ -334,7 +334,7 @@ class TestLocalizedGeneration:
         """Test localized generation with device frame."""
         project_config = ProjectConfig(
             project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
-            devices=["iPhone 15 Pro Portrait"],
+            devices=["iPhone 15 - Black - Portrait"],
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es"],
@@ -366,10 +366,10 @@ class TestLocalizedGeneration:
 
         # Check device-specific directories are created
         assert (
-            self.output_dir / "en" / "iPhone_15_Pro_Portrait" / "welcome.png"
+            self.output_dir / "en" / "iPhone_15_-_Black_-_Portrait" / "welcome.png"
         ).exists()
         assert (
-            self.output_dir / "es" / "iPhone_15_Pro_Portrait" / "welcome.png"
+            self.output_dir / "es" / "iPhone_15_-_Black_-_Portrait" / "welcome.png"
         ).exists()
 
     def test_localized_generation_text_only_screenshots(self):
@@ -447,8 +447,8 @@ class TestLocalizedGeneration:
 
         # Screenshots should be generated with different text but same styling
         assert (
-            self.output_dir / "en" / "iPhone_15_Pro_Portrait" / "styled_text.png"
+            self.output_dir / "en" / "iPhone_15_-_Black_-_Portrait" / "styled_text.png"
         ).exists()
         assert (
-            self.output_dir / "es" / "iPhone_15_Pro_Portrait" / "styled_text.png"
+            self.output_dir / "es" / "iPhone_15_-_Black_-_Portrait" / "styled_text.png"
         ).exists()
