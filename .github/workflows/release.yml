@@ -26,31 +26,32 @@ jobs:
       with:
         python-version: '3.12'
         
-    - name: Get tag name
+    - name: Get tag name and version
       id: tag
-      run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-        
+      run: |
+        echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
     - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
         pip install build wheel twine
-        
+
     - name: Build package
       run: python -m build
-        
+
     - name: Create checksums
       run: |
         cd dist
         sha256sum * > checksums.txt
-        
-    - name: Generate changelog
+
+    - name: Extract changelog for version
       id: changelog
-      run: |
-        if git describe --tags --abbrev=0 HEAD^ >/dev/null 2>&1; then
-          echo "changelog=New features and improvements since last release" >> $GITHUB_OUTPUT
-        else
-          echo "changelog=Initial release" >> $GITHUB_OUTPUT
-        fi
+      uses: mindsers/changelog-reader-action@v2
+      with:
+        version: ${{ steps.tag.outputs.version }}
+        path: ./CHANGELOG.md
+        validation_level: warn
         
     - name: Create Release
       uses: softprops/action-gh-release@v2
@@ -69,7 +70,7 @@ jobs:
           where masters create their finest work.
           
           ## What's Changed
-          ${{ steps.changelog.outputs.changelog }}
+          ${{ steps.changelog.outputs.changes }}
           
           ## Installation
           
