@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.4] - 2025-10-30
+
+### Fixed
+- Device frame rendering with automatic screen bounds detection using flood fill algorithm
+- Asset overflow at rounded corners with anti-aliased alpha channel masking
+- Blank space between assets and device frames
+- Smooth rounded corners preserved with alpha threshold of 50 for bezel separation
+
+### Changed
+- Replaced manual screen_bounds metadata with automatic detection
+- Improved mask generation using alpha channel inversion instead of binary flood fill
+- Enhanced type annotations and fixed all linting issues (black, isort, flake8, mypy)
+
+### Added
+- Comprehensive tests for flood fill algorithm and anti-aliased masking
+- Test coverage for automatic screen bounds detection and aspect ratio preservation
+
 ## [0.8.3] - 2024-12-12
 
 ### Fixed
