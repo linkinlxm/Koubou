@@ -77,7 +77,11 @@ class TestLiveScreenshotGenerator:
 
         # Create config file
         config_data = {
-            "project": {"name": "Test Project", "output_dir": "output"},
+            "project": {
+                "name": "Test Project",
+                "output_dir": "output",
+                "device": "iPhone 15 Pro Portrait",
+            },
             "defaults": {"background": {"type": "solid", "colors": ["#ffffff"]}},
             "screenshots": {
                 "welcome_screen": {
@@ -250,6 +254,7 @@ class TestLiveScreenshotGenerator:
             "project": {
                 "name": "Updated Test Project",  # Changed
                 "output_dir": "output",
+                "device": "iPhone 15 Pro Portrait",
             },
             "screenshots": {
                 "welcome_screen": {

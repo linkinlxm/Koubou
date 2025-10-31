@@ -147,8 +147,8 @@ class TestCLI:
             "project": {
                 "name": "Output Dir Test",
                 "output_dir": str(self.temp_dir / "yaml_output"),
+                "device": "iPhone 15 - Black - Portrait",
             },
-            "devices": ["iPhone 15 - Black - Portrait"],
             "screenshots": {
                 "test_screenshot": {
                     "content": [

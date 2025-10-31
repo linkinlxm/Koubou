@@ -100,7 +100,11 @@ class TestDependencyAnalyzer:
 
         # Create project config
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir="output"),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir="output",
+                device="iPhone 15 Pro Portrait",
+            ),
             screenshots={
                 "welcome_screen": ScreenshotDefinition(
                     name="Welcome Screen",
@@ -233,7 +237,11 @@ class TestDependencyAnalyzer:
         """Test project analysis with some missing assets."""
         # Create config with non-existent assets
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir="output"),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir="output",
+                device="iPhone 15 Pro Portrait",
+            ),
             screenshots={
                 "screen1": ScreenshotDefinition(
                     content=[
@@ -256,7 +264,11 @@ class TestDependencyAnalyzer:
     def test_analyze_empty_project(self, tmp_path):
         """Test analyzing project with no screenshots."""
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Empty Project", output_dir="output"),
+            project=ProjectInfo(
+                name="Empty Project",
+                output_dir="output",
+                device="iPhone 15 Pro Portrait",
+            ),
             screenshots={},
         )
 

@@ -89,7 +89,11 @@ class TestLocalizedGeneration:
         """Test that single language generation works unchanged."""
         # Create project without localization
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             screenshots={
                 "welcome": ScreenshotDefinition(
                     content=[
@@ -118,7 +122,11 @@ class TestLocalizedGeneration:
         """Test that localized generation creates language-specific directories."""
         # Create project with localization
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es", "ja"],
@@ -165,7 +173,11 @@ class TestLocalizedGeneration:
     def test_localized_generation_multiple_screenshots(self):
         """Test localized generation with multiple screenshots."""
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es"],
@@ -229,7 +241,11 @@ class TestLocalizedGeneration:
         self.xcstrings_path.unlink()
 
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es"],
@@ -280,7 +296,11 @@ class TestLocalizedGeneration:
     def test_localized_generation_updates_existing_xcstrings(self):
         """Test that existing xcstrings file is updated with new keys."""
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es"],
@@ -382,7 +402,11 @@ class TestLocalizedGeneration:
     def test_localized_generation_text_only_screenshots(self):
         """Test localized generation with text-only screenshots."""
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es"],
@@ -418,7 +442,11 @@ class TestLocalizedGeneration:
     def test_localized_generation_preserves_non_text_properties(self):
         """Test that localization preserves non-text content item properties."""
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es"],

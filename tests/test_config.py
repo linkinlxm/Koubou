@@ -138,7 +138,11 @@ class TestProjectConfig:
         from koubou.config import ContentItem, ProjectInfo, ScreenshotDefinition
 
         config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir="./output"),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir="./output",
+                device="iPhone 15 Pro Portrait",
+            ),
             screenshots={
                 "test_screenshot": ScreenshotDefinition(
                     content=[
@@ -150,4 +154,5 @@ class TestProjectConfig:
             },
         )
         assert config.project.name == "Test Project"
+        assert config.project.device == "iPhone 15 Pro Portrait"
         assert len(config.screenshots) == 1

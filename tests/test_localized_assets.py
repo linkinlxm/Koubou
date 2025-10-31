@@ -100,7 +100,11 @@ class TestLocalizedAssets:
         """Test convention-based asset resolution with {lang}/ directory pattern."""
         # Create project with localization and convention-based assets
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             devices=["iPhone 15 - Black - Portrait"],
             localization=LocalizationConfig(
                 base_language="en",
@@ -143,7 +147,11 @@ class TestLocalizedAssets:
         """Test explicit dict-based asset mapping with per-language paths."""
         # Create project with explicit asset mapping
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             devices=["iPhone 15 - Black - Portrait"],
             localization=LocalizationConfig(
                 base_language="en",
@@ -185,7 +193,11 @@ class TestLocalizedAssets:
         """Test fallback to base language when specific language asset not found."""
         # Create project with French language (not available, should fall back to en)
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             devices=["iPhone 15 - Black - Portrait"],
             localization=LocalizationConfig(
                 base_language="en",
@@ -219,7 +231,11 @@ class TestLocalizedAssets:
         """Test dict format falls back to 'default' when language not found."""
         # Create project with French language using dict with default
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             devices=["iPhone 15 - Black - Portrait"],
             localization=LocalizationConfig(
                 base_language="en",
@@ -257,7 +273,11 @@ class TestLocalizedAssets:
         """Test mixing convention-based and dict-based assets in same screenshot."""
         # Create project with both asset types
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             devices=["iPhone 15 - Black - Portrait"],
             localization=LocalizationConfig(
                 base_language="en",
@@ -302,7 +322,11 @@ class TestLocalizedAssets:
         """Test backward compatibility with existing string-based assets."""
         # Create project without localization (single language mode)
         project_config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir=str(self.output_dir)),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir=str(self.output_dir),
+                device="iPhone 15 Pro Portrait",
+            ),
             devices=["iPhone 15 - Black - Portrait"],
             screenshots={
                 "simple": ScreenshotDefinition(

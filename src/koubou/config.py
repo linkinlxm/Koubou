@@ -467,9 +467,7 @@ class ProjectInfo(BaseModel):
 
     name: str = Field(..., description="Project name")
     output_dir: str = Field(default="output", description="Output directory")
-    device: str = Field(
-        default="iPhone 15 Pro Portrait", description="Target device frame"
-    )
+    device: str = Field(..., description="Target device frame")
     output_size: Union[str, Tuple[int, int]] = Field(
         default="iPhone6_9",
         description=(

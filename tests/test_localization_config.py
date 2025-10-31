@@ -20,7 +20,11 @@ class TestLocalizationConfigIntegration:
     def test_project_config_without_localization(self):
         """Test ProjectConfig without localization (backward compatibility)."""
         config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir="output"),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir="output",
+                device="iPhone 15 Pro Portrait",
+            ),
             screenshots={
                 "test": ScreenshotDefinition(
                     content=[
@@ -35,7 +39,11 @@ class TestLocalizationConfigIntegration:
     def test_project_config_with_localization(self):
         """Test ProjectConfig with localization configuration."""
         config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir="output"),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir="output",
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es", "ja"],
@@ -61,6 +69,7 @@ class TestLocalizationConfigIntegration:
         project:
           name: "Test Project"
           output_dir: "output"
+          device: "iPhone 15 Pro Portrait"
 
         screenshots:
           welcome:
@@ -80,6 +89,7 @@ class TestLocalizationConfigIntegration:
         project:
           name: "Test Project"
           output_dir: "output"
+          device: "iPhone 15 Pro Portrait"
 
         localization:
           base_language: "en"
@@ -108,6 +118,7 @@ class TestLocalizationConfigIntegration:
         yaml_content = """
         project:
           name: "Test Project"
+          device: "iPhone 15 Pro Portrait"
 
         localization:
           base_language: "en"
@@ -130,7 +141,7 @@ class TestLocalizationConfigIntegration:
         # Empty base language
         with pytest.raises(ValueError, match="Base language cannot be empty"):
             ProjectConfig(
-                project=ProjectInfo(name="Test"),
+                project=ProjectInfo(name="Test", device="iPhone 15 Pro Portrait"),
                 localization=LocalizationConfig(
                     base_language="",
                     languages=["en", "es"],
@@ -141,7 +152,7 @@ class TestLocalizationConfigIntegration:
         # Empty languages list
         with pytest.raises(ValueError, match="Languages list cannot be empty"):
             ProjectConfig(
-                project=ProjectInfo(name="Test"),
+                project=ProjectInfo(name="Test", device="iPhone 15 Pro Portrait"),
                 localization=LocalizationConfig(
                     base_language="en",
                     languages=[],
@@ -154,7 +165,7 @@ class TestLocalizationConfigIntegration:
             ValueError, match="Base language 'en' must be included in languages list"
         ):
             ProjectConfig(
-                project=ProjectInfo(name="Test"),
+                project=ProjectInfo(name="Test", device="iPhone 15 Pro Portrait"),
                 localization=LocalizationConfig(
                     base_language="en",
                     languages=["es", "fr"],
@@ -243,7 +254,11 @@ class TestLocalizationConfigIntegration:
         """Test localization with relative xcstrings path."""
         with tempfile.TemporaryDirectory():
             config = ProjectConfig(
-                project=ProjectInfo(name="Test Project", output_dir="output"),
+                project=ProjectInfo(
+                    name="Test Project",
+                    output_dir="output",
+                    device="iPhone 15 Pro Portrait",
+                ),
                 localization=LocalizationConfig(
                     base_language="en",
                     languages=["en", "es"],
@@ -262,7 +277,11 @@ class TestLocalizationConfigIntegration:
     def test_localization_config_serialization(self):
         """Test that localization config can be serialized/deserialized."""
         config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir="output"),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir="output",
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es", "ja"],
@@ -286,7 +305,11 @@ class TestLocalizationConfigIntegration:
     def test_localization_with_mixed_content(self):
         """Test localization config with mixed text and image content."""
         config = ProjectConfig(
-            project=ProjectInfo(name="Test Project", output_dir="output"),
+            project=ProjectInfo(
+                name="Test Project",
+                output_dir="output",
+                device="iPhone 15 Pro Portrait",
+            ),
             localization=LocalizationConfig(
                 base_language="en",
                 languages=["en", "es"],

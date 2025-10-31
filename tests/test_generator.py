@@ -191,7 +191,9 @@ class TestScreenshotGenerator:
 
         project_config = ProjectConfig(
             project=ProjectInfo(
-                name="Test Project", output_dir=str(self.temp_dir / "project_output")
+                name="Test Project",
+                output_dir=str(self.temp_dir / "project_output"),
+                device="iPhone 15 Pro Portrait",
             ),
             screenshots={
                 "screenshot1": ScreenshotDefinition(

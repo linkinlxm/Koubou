@@ -31,6 +31,7 @@ class TestLiveLocalization:
             "project": {
                 "name": "Live Localization Test",
                 "output_dir": str(self.output_dir),
+                "device": "iPhone 15 Pro Portrait",
             },
             "localization": {
                 "base_language": "en",
