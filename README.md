@@ -13,6 +13,7 @@
 
 - **🔄 Live Editing** - Real-time screenshot regeneration when config or assets change
 - **🌍 Multi-Language Localization** - Generate localized screenshots using familiar xcstrings format from Xcode
+- **🖼️ Localized Assets** - Automatic language-specific asset resolution with convention-based and explicit mapping
 - **🎨 100+ Device Frames** - iPhone 16 Pro, iPad Air M2, MacBook Pro, Apple Watch Ultra, and more
 - **🌈 Professional Backgrounds** - Linear, radial, conic gradients with precise color control
 - **✨ Rich Typography** - Advanced text overlays with stroke, alignment, wrapping, and custom fonts
@@ -80,76 +81,49 @@ kou live my-screenshots.yaml
 
 ## 🔄 Live Editing
 
-**New in v0.5.0:** Koubou now supports real-time screenshot generation! The `live` command automatically regenerates screenshots when your YAML configuration or referenced assets change.
+Real-time screenshot regeneration when your YAML configuration or assets change.
 
 ```bash
 # Start live editing mode
 kou live my-screenshots.yaml
 
-# Optional: Adjust debounce delay (default: 0.5s)
+# Adjust debounce delay (default: 0.5s)
 kou live my-screenshots.yaml --debounce 1.0
 
-# Enable verbose logging to see what's happening
+# Enable verbose logging
 kou live my-screenshots.yaml --verbose
 ```
 
-### How Live Editing Works
+**How it works:**
+- Monitors YAML config and all referenced assets
+- Regenerates only affected screenshots
+- Debounces rapid changes to prevent excessive regeneration
 
-1. **Smart Change Detection**: Monitors your YAML config file and all referenced assets
-2. **Selective Regeneration**: Only regenerates screenshots affected by changes
-3. **Dependency Tracking**: Automatically detects which assets each screenshot uses
-4. **Debounced Updates**: Prevents excessive regeneration during rapid edits
+**Perfect for iterative design** - edit assets in design tools, update text, tweak positioning, and see results instantly.
 
-### Live Editing Workflow
-
-```yaml
-# my-app-screenshots.yaml
-project:
-  name: "My App"
-  output_dir: "Screenshots/Generated"
-
-screenshots:
-  welcome_screen:
-    content:
-      - type: "image"
-        asset: "app-screens/welcome.png"  # Live editing watches this file
-        frame: true
-      - type: "text"
-        content: "Welcome to the future"     # Changes to this regenerate instantly
-```
-
-**Perfect for iterative design workflows** - edit your assets in design tools, update text content, or tweak positioning, and see results instantly without manual regeneration!
-
-### Platform Support
-- **Live Editing**: macOS and Linux only
-- **Standard Generation**: macOS, Linux, and Windows
+**Platform support:** macOS and Linux only (standard generation works on Windows)
 
 ---
 
 ## 🌍 Multi-Language Localization
 
-Generate beautiful localized screenshots for international App Store submissions using the familiar xcstrings format from Xcode.
-
-### Quick Setup
-
-Add a localization block to your YAML configuration:
+Generate localized screenshots for international App Store submissions using xcstrings format from Xcode.
 
 ```yaml
 project:
   name: "My App Screenshots"
   output_dir: "Screenshots/Generated"
 
-# Enable multi-language support
 localization:
   base_language: "en"
   languages: ["en", "es", "ja", "fr", "de"]
-  xcstrings_path: "Localizable.xcstrings"  # optional
+  xcstrings_path: "Localizable.xcstrings"  # Optional - auto-creates if missing
 
 screenshots:
   welcome_screen:
     content:
       - type: "text"
-        content: "Welcome to Amazing App"  # This becomes a localization key
+        content: "Welcome to Amazing App"  # Text becomes localization key
         position: ["50%", "20%"]
         size: 48
         color: "#8E4EC6"
@@ -158,49 +132,78 @@ screenshots:
         position: ["50%", "60%"]
 ```
 
-### How It Works
-
-1. **Extract Text**: Koubou automatically finds all text content in your screenshots
-2. **Generate xcstrings**: Creates or updates your xcstrings file with text as localization keys
-3. **iOS-Familiar Format**: Edit translations in Xcode using the xcstrings editor you already know
-4. **Auto-Generate Screenshots**: Run `kou generate config.yaml` to create screenshots for all languages
-
-### Output Structure
-
+**Output structure:**
 ```
 Screenshots/Generated/
 ├── en/iPhone_15_Pro_Portrait/welcome_screen.png
-├── es/iPhone_15_Pro_Portrait/welcome_screen.png  
+├── es/iPhone_15_Pro_Portrait/welcome_screen.png
 ├── ja/iPhone_15_Pro_Portrait/welcome_screen.png
 ├── fr/iPhone_15_Pro_Portrait/welcome_screen.png
 └── de/iPhone_15_Pro_Portrait/welcome_screen.png
 ```
 
-### Live Editing with Localization
+**Workflow:** Koubou extracts text content and creates/updates your xcstrings file. Edit translations in Xcode's xcstrings editor, then regenerate screenshots. Live mode watches both YAML config and xcstrings file for changes.
 
-Live mode works seamlessly with localization:
+**Key benefits:** Uses iOS-native xcstrings format, natural text as keys (no IDs), supports plurals and device variants, works seamlessly with live mode.
 
-```bash
-kou live config.yaml  # Watches YAML config AND xcstrings file
+---
+
+## 🖼️ Localized Assets
+
+Automatically resolve language-specific images for multi-language screenshots. Perfect for RTL layouts, region-specific content, or tools like Maestro that generate per-locale screenshots.
+
+### Convention-Based (Recommended)
+
+Organize assets in `{lang}/` subdirectories - Koubou resolves them automatically:
+
+```yaml
+localization:
+  base_language: "en"
+  languages: ["en", "es", "ja"]
+
+screenshots:
+  hero_screen:
+    content:
+      - type: "image"
+        asset: "screenshots/hero.png"  # Auto-resolves to screenshots/{lang}/hero.png
+        position: ["50%", "50%"]
 ```
 
-- **Edit xcstrings in Xcode** → All language screenshots regenerate automatically
-- **Update YAML config** → xcstrings file updates with new text keys
-- **Change assets** → All localized versions update
+**Directory structure:**
+```
+screenshots/
+├── en/hero.png
+├── es/hero.png
+├── ja/hero.png
+└── hero.png  # Fallback for missing languages
+```
 
-### Key Benefits
+**Resolution order:** `{lang}/path` → `{base_lang}/path` → `direct_path`
 
-- **🍎 iOS Developer Friendly**: Uses xcstrings format you already know from Xcode
-- **🔑 Natural Keys**: Your actual text becomes the localization key (no artificial IDs)
-- **🌍 Complete Localization**: Supports all xcstrings features including plurals and device variants
-- **🚀 Zero Extra Work**: Add localization block and run the same commands
-- **🔄 Live Updates**: Edit translations and see all screenshots update instantly
+### Explicit Mapping
+
+For non-standard structures or external tool outputs:
+
+```yaml
+screenshots:
+  onboarding:
+    content:
+      - type: "image"
+        asset:
+          en: "maestro/en_iphone/onboarding.png"
+          es: "maestro/es_iphone/onboarding.png"
+          ja: "maestro/ja_iphone/onboarding.png"
+          default: "screenshots/fallback.png"  # Optional
+        position: ["50%", "50%"]
+```
+
+Mix both approaches in the same screenshot as needed.
 
 ---
 
 ## 🎨 Configuration
 
-Create elegant screenshots with YAML configuration:
+Create screenshots with YAML configuration:
 
 ```yaml
 project:
@@ -237,88 +240,14 @@ screenshots:
         frame: true
 ```
 
-### Advanced Configuration
-
-```yaml
-project:
-  name: "Feature Showcase"
-  output_dir: "Screenshots/Generated"
-
-devices:
-  - "iPhone 15 Pro Portrait"
-
-defaults:
-  background:
-    type: radial
-    colors: ["#ff9a9e", "#fecfef", "#feca57"]
-
-screenshots:
-  ai_analysis:
-    content:
-      - type: "text"
-        content: "✨ AI-Powered Analysis"
-        position: ["50%", "10%"]
-        size: 42
-        color: "#2c2c54"
-        weight: "bold"
-      - type: "text"
-        content: "Smart insights at your fingertips"
-        position: ["50%", "20%"]
-        size: 28
-        color: "#1A73E8"
-      - type: "image"
-        asset: "screenshots/analysis.png"
-        position: ["50%", "65%"]
-        scale: 0.5
-        frame: true
-```
-
-### Gradient Text Configuration
-
-```yaml
-screenshots:
-  gradient_showcase:
-    content:
-      - type: "text"
-        content: "🌈 Gradient Magic"
-        position: ["50%", "15%"]
-        size: 48
-        gradient:
-          type: linear
-          colors: ["#FF6B6B", "#4ECDC4", "#45B7D1"]
-          direction: 45
-        weight: "bold"
-      - type: "text"
-        content: "Beautiful gradients for stunning text"
-        position: ["50%", "25%"]
-        size: 24
-        gradient:
-          type: radial
-          colors: ["#667eea", "#764ba2"]
-          center: ["50%", "50%"]
-          radius: "70%"
-      - type: "text"
-        content: "Advanced Color Control"
-        position: ["50%", "35%"]
-        size: 28
-        gradient:
-          type: linear
-          colors: ["#f093fb", "#f5576c", "#4facfe"]
-          positions: [0.0, 0.3, 1.0]
-          direction: 90
-        stroke_width: 2
-        stroke_gradient:
-          type: linear
-          colors: ["#333333", "#666666"]
-          direction: 45
-```
+See the YAML API Reference below for all available options including gradients, strokes, and advanced positioning.
 
 ## 🎯 Commands
 
 ### Core Commands
 
 - `kou generate <config.yaml>` - Generate screenshots from configuration
-- `kou live <config.yaml>` - **[New]** Live editing mode with real-time regeneration
+- `kou live <config.yaml>` - Live editing mode with real-time regeneration
 - `kou --create-config <output.yaml>` - Create a sample configuration file
 - `kou --version` - Show version information
 - `kou --help` - Show detailed help
@@ -415,10 +344,10 @@ defaults:                    # Default settings applied to all screenshots
     direction: float?        # Degrees for gradients (default: 0)
 ```
 
-### Screenshot Configuration  
+### Screenshot Configuration
 ```yaml
 screenshots:
-  screenshot_id:             # Screenshots are now organized by ID (breaking change in v0.5.0)
+  screenshot_id:             # Unique identifier for each screenshot
     content:                 # Array of content items
       - type: "text" | "image"
         # Text content properties
@@ -429,7 +358,7 @@ screenshots:
         weight: string?      # "normal" or "bold" (default: "normal")
         alignment: string?   # "left", "center", "right" (default: "center")
         # Image content properties
-        asset: string?       # Image file path (for type: "image")
+        asset: string | dict? # Image path (string) or localized mapping (dict)
         scale: float?        # Scale factor (default: 1.0)
         frame: bool?         # Apply device frame (default: false)
 ```
