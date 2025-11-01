@@ -248,14 +248,17 @@ class ScreenshotGenerator:
 
             # Ensure output directory exists
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            # Convert to RGB if saving as JPEG, keep RGBA for PNG
+
+            # Convert RGBA to RGB to remove alpha channel
+            # App Store does not accept images with alpha channels
+            rgb_canvas = Image.new("RGB", canvas.size, (255, 255, 255))
+            rgb_canvas.paste(canvas, mask=canvas)
+
+            # Save based on file extension
             if output_path.suffix.lower() == ".jpg":
-                # Create white background for JPEG
-                rgb_canvas = Image.new("RGB", canvas.size, (255, 255, 255))
-                rgb_canvas.paste(canvas, mask=canvas)
                 rgb_canvas.save(output_path, "JPEG", quality=95)
             else:
-                canvas.save(output_path, "PNG")
+                rgb_canvas.save(output_path, "PNG")
 
             logger.info(f"✅ Generated: {config.name}")
             return output_path

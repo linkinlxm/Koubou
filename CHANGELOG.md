@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.2] - 2025-11-01
+
+### Fixed
+- **CRITICAL**: Removed alpha channel from PNG screenshots - App Store does not accept images with alpha channels
+- All generated PNG files now saved as RGB (without alpha) instead of RGBA
+- Previously, PNG screenshots included an alpha channel that would cause App Store Connect to reject the images
+
+### Added
+- Test to verify PNG files don't contain alpha channel
+- Test to verify JPEG files are properly saved as RGB
+
+### Changed
+- Unified image saving logic to always convert RGBA canvas to RGB before saving
+- Both PNG and JPEG outputs now use the same RGB conversion process
+
+### Testing
+- All 310 tests passing
+- New tests specifically verify no alpha channel in generated images
+- All linters passing (black, isort, flake8, mypy)
+
 ## [0.10.1] - 2025-10-31
 
 ### Fixed

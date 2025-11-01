@@ -228,6 +228,49 @@ class TestScreenshotGenerator:
         for result_path in results:
             assert result_path.exists()
 
+    def test_png_has_no_alpha_channel(self):
+        """Test that PNG files don't have alpha (App Store requirement)."""
+        config = ScreenshotConfig(
+            name="No Alpha Test",
+            source_image=str(self.source_image_path),
+            output_size=(400, 800),
+            output_path=str(self.temp_dir / "no_alpha.png"),
+        )
+
+        result_path = self.generator.generate_screenshot(config)
+
+        # Verify the image was created
+        assert result_path.exists()
+
+        # Load the saved image and check it has no alpha channel
+        output_image = Image.open(result_path)
+        assert (
+            output_image.mode == "RGB"
+        ), f"Expected RGB mode but got {output_image.mode}"
+        assert (
+            "transparency" not in output_image.info
+        ), "Image should not have transparency info"
+
+    def test_jpeg_has_no_alpha_channel(self):
+        """Test that generated JPEG files don't have alpha channel."""
+        config = ScreenshotConfig(
+            name="JPEG Test",
+            source_image=str(self.source_image_path),
+            output_size=(400, 800),
+            output_path=str(self.temp_dir / "test.jpg"),
+        )
+
+        result_path = self.generator.generate_screenshot(config)
+
+        # Verify the image was created
+        assert result_path.exists()
+
+        # Load the saved image and check it's RGB
+        output_image = Image.open(result_path)
+        assert (
+            output_image.mode == "RGB"
+        ), f"Expected RGB mode but got {output_image.mode}"
+
     def test_jpeg_output(self):
         """Test JPEG output format."""
         config = ScreenshotConfig(
