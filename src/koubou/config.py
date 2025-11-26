@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple, Union
 
-from pydantic import BaseModel, Field, model_validator, validator
+from pydantic import BaseModel, Field, ValidationInfo, field_validator, model_validator
 
 
 def load_appstore_sizes() -> Dict[str, Dict[str, Union[int, str]]]:
@@ -70,9 +70,10 @@ class GradientConfig(BaseModel):
         default=0, description="Starting angle in degrees (conic gradients)"
     )
 
-    @validator("colors")
-    def validate_colors(cls, v: List[str], values: Dict) -> List[str]:
-        gradient_type = values.get("type")
+    @field_validator("colors")
+    @classmethod
+    def validate_colors(cls, v: List[str], info: ValidationInfo) -> List[str]:
+        gradient_type = info.data.get("type")
 
         # Validate minimum colors based on type
         if gradient_type == "solid" and len(v) != 1:
@@ -88,14 +89,15 @@ class GradientConfig(BaseModel):
                 raise ValueError("Colors must be in hex format (e.g., #FFFFFF)")
         return v
 
-    @validator("positions")
+    @field_validator("positions")
+    @classmethod
     def validate_positions(
-        cls, v: Optional[List[float]], values: Dict
+        cls, v: Optional[List[float]], info: ValidationInfo
     ) -> Optional[List[float]]:
         if v is None:
             return v
 
-        colors = values.get("colors", [])
+        colors = info.data.get("colors", [])
         if len(v) != len(colors):
             raise ValueError("Positions array must match colors array length")
 
@@ -107,13 +109,15 @@ class GradientConfig(BaseModel):
 
         return v
 
-    @validator("direction")
+    @field_validator("direction")
+    @classmethod
     def validate_direction(cls, v: Optional[float]) -> Optional[float]:
         if v is not None and (v < 0 or v >= 360):
             raise ValueError("Direction must be between 0 and 359 degrees")
         return v
 
-    @validator("start_angle")
+    @field_validator("start_angle")
+    @classmethod
     def validate_start_angle(cls, v: Optional[float]) -> Optional[float]:
         if v is not None and (v < 0 or v >= 360):
             raise ValueError("Start angle must be between 0 and 359 degrees")
@@ -167,28 +171,29 @@ class TextOverlay(BaseModel):
         default=0, description="Rotation angle in degrees (clockwise)"
     )
 
-    @validator("color")
+    @field_validator("color")
+    @classmethod
     def validate_color(cls, v: Optional[str]) -> Optional[str]:
         if v and not v.startswith("#"):
             raise ValueError("Colors must be in hex format (e.g., #FFFFFF)")
         return v
 
-    @validator("stroke_color")
+    @field_validator("stroke_color")
+    @classmethod
     def validate_stroke_color(cls, v: Optional[str]) -> Optional[str]:
         if v and not v.startswith("#"):
             raise ValueError("Stroke colors must be in hex format (e.g., #FFFFFF)")
         return v
 
-    @validator("gradient")
+    @field_validator("gradient")
+    @classmethod
     def validate_fill_options(
-        cls, v: Optional[GradientConfig], values: Dict
+        cls, v: Optional[GradientConfig], info: ValidationInfo
     ) -> Optional[GradientConfig]:
-        color = values.get("color")
+        color = info.data.get("color")
 
-        if color is None and v is None:
-            # Set default color if neither is specified
-            values["color"] = "#000000"
-        elif color is not None and v is not None:
+        # Validation only - ensure both color and gradient are not specified
+        if color is not None and v is not None:
             raise ValueError(
                 "Cannot specify both 'color' and 'gradient'. Choose exactly one."
             )
@@ -246,14 +251,16 @@ class ScreenshotConfig(BaseModel):
         default=0, description="Image rotation angle in degrees (clockwise)"
     )
 
-    @validator("source_image")
+    @field_validator("source_image")
+    @classmethod
     def validate_source_image(cls, v: str) -> str:
         path = Path(v)
         if not path.exists():
             raise ValueError(f"Source image not found: {v}")
         return v
 
-    @validator("output_size")
+    @field_validator("output_size")
+    @classmethod
     def validate_output_size(cls, v: Union[str, Tuple[int, int]]) -> Tuple[int, int]:
         """Validate and resolve output size to tuple."""
         # Resolve named size or validate custom tuple
@@ -314,40 +321,42 @@ class ContentItem(BaseModel):
         default=0, description="Rotation angle in degrees (clockwise)"
     )
 
-    @validator("color")
+    @field_validator("color")
+    @classmethod
     def validate_color_format(cls, v: Optional[str]) -> Optional[str]:
         if v and not v.startswith("#"):
             raise ValueError("Colors must be in hex format (e.g., #FFFFFF)")
         return v
 
-    @validator("stroke_color")
+    @field_validator("stroke_color")
+    @classmethod
     def validate_stroke_color_format(cls, v: Optional[str]) -> Optional[str]:
         if v and not v.startswith("#"):
             raise ValueError("Stroke colors must be in hex format (e.g., #FFFFFF)")
         return v
 
-    @validator("gradient")
+    @field_validator("gradient")
+    @classmethod
     def validate_text_fill_options(
-        cls, v: Optional[GradientConfig], values: Dict
+        cls, v: Optional[GradientConfig], info: ValidationInfo
     ) -> Optional[GradientConfig]:
-        color = values.get("color")
+        color = info.data.get("color")
 
-        if color is None and v is None:
-            # Set default color if neither is specified
-            values["color"] = "#000000"
-        elif color is not None and v is not None:
+        # Validation only - ensure both color and gradient are not specified
+        if color is not None and v is not None:
             raise ValueError(
                 "Cannot specify both 'color' and 'gradient'. Choose exactly one."
             )
 
         return v
 
-    @validator("stroke_gradient")
+    @field_validator("stroke_gradient")
+    @classmethod
     def validate_stroke_fill_options(
-        cls, v: Optional[GradientConfig], values: Dict
+        cls, v: Optional[GradientConfig], info: ValidationInfo
     ) -> Optional[GradientConfig]:
-        stroke_color = values.get("stroke_color")
-        stroke_width = values.get("stroke_width")
+        stroke_color = info.data.get("stroke_color")
+        stroke_width = info.data.get("stroke_width")
 
         # Only validate if stroke is being used
         if stroke_width is not None and stroke_width > 0:
@@ -364,7 +373,8 @@ class ContentItem(BaseModel):
 
         return v
 
-    @validator("asset")
+    @field_validator("asset")
+    @classmethod
     def validate_asset_format(
         cls, v: Optional[Union[str, Dict[str, str]]]
     ) -> Optional[Union[str, Dict[str, str]]]:
@@ -425,13 +435,15 @@ class LocalizationConfig(BaseModel):
         description="Path to xcstrings localization file",
     )
 
-    @validator("base_language")
+    @field_validator("base_language")
+    @classmethod
     def validate_base_language(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError("Base language cannot be empty")
         return v.strip()
 
-    @validator("languages")
+    @field_validator("languages")
+    @classmethod
     def validate_languages(cls, v: List[str]) -> List[str]:
         if not v:
             raise ValueError("Languages list cannot be empty")
@@ -450,11 +462,12 @@ class LocalizationConfig(BaseModel):
 
         return unique_languages
 
-    @validator("languages")
+    @field_validator("languages")
+    @classmethod
     def validate_base_language_in_languages(
-        cls, v: List[str], values: Dict
+        cls, v: List[str], info: ValidationInfo
     ) -> List[str]:
-        base_language = values.get("base_language")
+        base_language = info.data.get("base_language")
         if base_language and base_language not in v:
             raise ValueError(
                 f"Base language '{base_language}' must be included in languages list"
@@ -468,23 +481,49 @@ class ProjectInfo(BaseModel):
     name: str = Field(..., description="Project name")
     output_dir: str = Field(default="output", description="Output directory")
     device: str = Field(..., description="Target device frame")
-    output_size: Union[str, Tuple[int, int]] = Field(
-        default="iPhone6_9",
+    output_size: Tuple[int, int] = Field(
+        default=(1320, 2868),  # Default to iPhone6_9 dimensions
         description=(
             "Output size for all screenshots. Either App Store named size "
             "(e.g., 'iPhone6_9') or custom tuple [width, height]"
         ),
     )
 
-    @validator("output_size", always=True)
-    def validate_output_size(cls, v: Union[str, Tuple[int, int]]) -> Tuple[int, int]:
-        """Validate and resolve output size to tuple."""
-        resolved = resolve_output_size(v)
-        width, height = resolved
+    @model_validator(mode="before")
+    @classmethod
+    def resolve_output_size_field(cls, data: dict) -> dict:
+        """Resolve output_size from string or list to tuple before validation."""
+        if isinstance(data, dict) and "output_size" in data:
+            v = data["output_size"]
 
-        if width > 10000 or height > 10000:
-            raise ValueError("Output size too large (max 10000x10000)")
-        return resolved
+            # Handle list input (from YAML) - convert to tuple
+            if isinstance(v, list) and len(v) == 2:
+                try:
+                    v = (int(v[0]), int(v[1]))
+                except (ValueError, TypeError) as e:
+                    raise ValueError(f"Invalid output_size list: {v}") from e
+
+            # Resolve string or tuple to final dimensions
+            if isinstance(v, str):
+                resolved = resolve_output_size(v)
+            elif isinstance(v, tuple) and len(v) == 2:
+                resolved = resolve_output_size(v)
+            else:
+                raise ValueError(
+                    f"output_size must be a string (named size) or "
+                    f"tuple/list of 2 integers, got: {v}"
+                )
+
+            width, height = resolved
+            if width > 10000 or height > 10000:
+                raise ValueError("Output size too large (max 10000x10000)")
+
+            data["output_size"] = resolved
+        elif isinstance(data, dict) and "output_size" not in data:
+            # If output_size not provided, use default from appstore sizes
+            data["output_size"] = resolve_output_size("iPhone6_9")
+
+        return data
 
 
 class ProjectConfig(BaseModel):
@@ -500,7 +539,8 @@ class ProjectConfig(BaseModel):
         ..., description="Screenshot definitions mapped by ID"
     )
 
-    @validator("project")
+    @field_validator("project")
+    @classmethod
     def create_output_directory(cls, v: "ProjectInfo") -> "ProjectInfo":
         Path(v.output_dir).mkdir(parents=True, exist_ok=True)
         return v
