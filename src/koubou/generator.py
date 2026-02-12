@@ -583,7 +583,9 @@ class ScreenshotGenerator:
             transparent_frame_bg = Image.new(
                 "RGBA", (scaled_frame_width, scaled_frame_height), (255, 255, 255, 0)
             )
-            framed_asset = Image.composite(framed_asset, transparent_frame_bg, screen_mask)
+            framed_asset = Image.composite(
+                framed_asset, transparent_frame_bg, screen_mask
+            )
 
             # Overlay frame bezel on top of clipped source
             framed_asset = Image.alpha_composite(framed_asset, scaled_frame)
