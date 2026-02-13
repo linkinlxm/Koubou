@@ -257,12 +257,80 @@ gradient:
   frame: bool?               # Apply device frame around image (default: false)
 ```
 
+### Highlight Content Item
+
+Draw annotation shapes to highlight areas of the screenshot. Rendered after images and before text.
+
+```yaml
+- type: "highlight"
+  shape: "circle" | "rounded_rect" | "rect"  # Shape type (required)
+  position: [string, string]   # Center position as ["50%", "50%"] (required)
+  dimensions: [string, string]? # Width, height as ["20%", "15%"] or ["200", "150"]
+  border_color: string?        # Border color in hex (e.g., "#FF3B30")
+  border_width: int?           # Border width in pixels (default: 3)
+  fill_color: string?          # Fill color in hex, supports alpha (e.g., "#FF3B3020")
+  corner_radius: int?          # Corner radius for rounded_rect (default: 16)
+```
+
+#### Example
+```yaml
+- type: "highlight"
+  shape: "circle"
+  position: ["65%", "45%"]
+  dimensions: ["20%", "15%"]
+  border_color: "#FF3B30"
+  border_width: 4
+  fill_color: "#FF3B3020"
+```
+
+### Zoom Content Item
+
+Magnified callout bubble that crops a source region and displays it enlarged at another position. Rendered after highlights and before text.
+
+```yaml
+- type: "zoom"
+  source_position: [string, string]   # Center of area to magnify (required)
+  source_size: [string, string]       # Crop region size (required)
+  display_position: [string, string]? # Where magnified view appears (default: position)
+  display_size: [string, string]      # Size of magnified bubble (required)
+  shape: "circle" | "rounded_rect"?   # Bubble shape (default: "circle")
+  border_color: string?               # Border color in hex
+  border_width: int?                  # Border width in pixels (default: 3)
+  corner_radius: int?                 # For rounded_rect (default: 16)
+  connector: bool?                    # Draw line from source to display (default: false)
+  connector_color: string?            # Line color (defaults to border_color)
+  connector_width: int?               # Line width in pixels (default: 2)
+```
+
+#### Example
+```yaml
+- type: "zoom"
+  source_position: ["65%", "45%"]
+  source_size: ["15%", "10%"]
+  display_position: ["25%", "20%"]
+  display_size: ["35%", "30%"]
+  shape: "circle"
+  border_color: "#007AFF"
+  border_width: 3
+  connector: true
+  connector_color: "#007AFF"
+```
+
 ### Position Format
 
 Positions can be specified as:
 - **Percentages**: `["50%", "20%"]` - Relative to canvas size
 - **Pixels**: `["100px", "50px"]` - Absolute positioning
 - **Mixed**: `["50%", "100px"]` - Percentage width, pixel height
+
+### Render Layer Order
+
+Content items are rendered in this order regardless of their position in the YAML:
+1. **Background** - Gradient or solid color
+2. **Images** - Source screenshots with optional device frames
+3. **Highlights** - Annotation shapes (circle, rect, rounded_rect)
+4. **Zoom callouts** - Magnified callout bubbles with connectors
+5. **Text** - Text overlays on top of everything
 
 ---
 

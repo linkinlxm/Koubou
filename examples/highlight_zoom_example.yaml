@@ -1,0 +1,135 @@
+# 🎯 Koubou Highlight & Zoom Example
+# This demonstrates highlight annotations and zoom callout features
+
+project:
+  name: "Highlight & Zoom Showcase"
+  output_dir: "output"
+  device: "iPhone 16 Pro - Black Titanium - Portrait"
+  output_size: "iPhone6_9"  # 1320×2868
+
+defaults:
+  background:
+    type: "linear"
+    colors: ["#667eea", "#764ba2"]
+    direction: 135
+
+screenshots:
+  highlight_demo:
+    content:
+      - type: "image"
+        asset: "screenshots/app_screen.png"
+        position: ["50%", "55%"]
+        scale: 0.85
+
+      # Circle highlight on the "Featured Deal" section
+      - type: "highlight"
+        shape: "circle"
+        position: ["35%", "57%"]
+        dimensions: ["22%", "10%"]
+        border_color: "#FF3B30"
+        border_width: 5
+        fill_color: "#FF3B3018"
+
+      # Rounded rect highlight on the "Add to Cart" button
+      - type: "highlight"
+        shape: "rounded_rect"
+        position: ["46%", "62%"]
+        dimensions: ["22%", "5%"]
+        border_color: "#34C759"
+        border_width: 4
+        corner_radius: 20
+
+      - type: "text"
+        content: "Highlight Key Features"
+        position: ["50%", "10%"]
+        size: 56
+        color: "#ffffff"
+        weight: "bold"
+
+      - type: "text"
+        content: "Draw attention to what matters"
+        position: ["50%", "16%"]
+        size: 28
+        color: "#ffffffcc"
+
+  zoom_demo:
+    content:
+      - type: "image"
+        asset: "screenshots/app_screen.png"
+        position: ["50%", "55%"]
+        scale: 0.85
+
+      # Zoom into the price of the Smart Watch product
+      - type: "zoom"
+        source_position: ["72%", "38%"]
+        source_size: ["22%", "5%"]
+        display_position: ["30%", "80%"]
+        display_size: ["45%", "12%"]
+        shape: "rounded_rect"
+        border_color: "#007AFF"
+        border_width: 5
+        corner_radius: 24
+        connector: true
+        connector_color: "#007AFF"
+        connector_width: 3
+
+      - type: "text"
+        content: "Zoom Into Details"
+        position: ["50%", "10%"]
+        size: 56
+        color: "#ffffff"
+        weight: "bold"
+
+      - type: "text"
+        content: "Magnify any area of your screenshot"
+        position: ["50%", "16%"]
+        size: 28
+        color: "#ffffffcc"
+
+  combined_demo:
+    background:
+      type: "linear"
+      colors: ["#0F2027", "#203A43", "#2C5364"]
+      direction: 180
+    content:
+      - type: "image"
+        asset: "screenshots/app_screen.png"
+        position: ["50%", "50%"]
+        scale: 0.78
+
+      # Highlight the product grid area
+      - type: "highlight"
+        shape: "rounded_rect"
+        position: ["50%", "35%"]
+        dimensions: ["72%", "22%"]
+        border_color: "#FF9500"
+        border_width: 4
+        fill_color: "#FF950015"
+        corner_radius: 24
+
+      # Zoom into the Wireless Earbuds price
+      - type: "zoom"
+        source_position: ["32%", "38%"]
+        source_size: ["18%", "4%"]
+        display_position: ["70%", "82%"]
+        display_size: ["40%", "10%"]
+        shape: "rounded_rect"
+        border_color: "#FF9500"
+        border_width: 4
+        corner_radius: 20
+        connector: true
+        connector_color: "#FF950080"
+        connector_width: 2
+
+      - type: "text"
+        content: "Highlight + Zoom"
+        position: ["50%", "7%"]
+        size: 56
+        color: "#ffffff"
+        weight: "bold"
+
+      - type: "text"
+        content: "Combine annotations for maximum impact"
+        position: ["50%", "13%"]
+        size: 26
+        color: "#ffffffbb"

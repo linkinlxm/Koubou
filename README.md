@@ -20,6 +20,8 @@
 - **🌈 Gradient Typography** - Linear, radial, and conic gradients for text with custom color stops
 - **📱 YAML-First Configuration** - Elegant, declarative screenshot definitions
 - **🚀 Batch Processing** - Generate multiple screenshots efficiently from a single config
+- **🔦 Highlight Annotations** - Circle, rounded rect, and rect shapes to draw attention to UI elements
+- **🔍 Zoom Callouts** - Magnified callout bubbles with connector lines to showcase details
 - **🔧 Flexible API** - Both simple and advanced configuration options
 - **💎 Artisan Quality** - Pixel-perfect output ready for App Store submission
 
@@ -402,7 +404,7 @@ defaults:                    # Default settings applied to all screenshots
 screenshots:
   screenshot_id:             # Unique identifier for each screenshot
     content:                 # Array of content items
-      - type: "text" | "image"
+      - type: "text" | "image" | "highlight" | "zoom"
         # Text content properties
         content: string?     # Text content (for type: "text")
         position: [string, string]  # Position as ["x%", "y%"] or ["xpx", "ypx"]
@@ -460,6 +462,30 @@ background:
   position: [string, string] # Position as ["50%", "60%"] or ["200px", "300px"]
   scale: float               # Scale factor (default: 1.0)
   frame: bool                # Apply device frame around image (default: false)
+
+# Highlight Content Item
+- type: "highlight"
+  shape: "circle" | "rounded_rect" | "rect"  # Shape (required)
+  position: [string, string] # Center position as ["50%", "50%"]
+  dimensions: [string, string] # Width, height as ["20%", "15%"]
+  border_color: string?      # Border color in hex (e.g., "#FF3B30")
+  border_width: int?         # Border width in pixels (default: 3)
+  fill_color: string?        # Fill color in hex, supports alpha (e.g., "#FF3B3020")
+  corner_radius: int?        # Corner radius for rounded_rect (default: 16)
+
+# Zoom Content Item
+- type: "zoom"
+  source_position: [string, string]  # Center of area to magnify (required)
+  source_size: [string, string]      # Crop region size (required)
+  display_position: [string, string] # Where magnified view appears
+  display_size: [string, string]     # Size of magnified bubble (required)
+  shape: "circle" | "rounded_rect"   # Bubble shape (default: "circle")
+  border_color: string?      # Border color in hex
+  border_width: int?         # Border width (default: 3)
+  corner_radius: int?        # For rounded_rect (default: 16)
+  connector: bool?           # Draw line from source to display (default: false)
+  connector_color: string?   # Line color (defaults to border_color)
+  connector_width: int?      # Line width (default: 2)
 ```
 
 ## 🏗️ Architecture
