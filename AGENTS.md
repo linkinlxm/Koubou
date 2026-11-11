@@ -48,6 +48,11 @@ make check          # All of the above
 make install-hooks  # Enable pre-commit hooks
 ```
 
+## Testing
+
+Run integration tests: `pytest tests/integration/`
+Debug with `--verbose` flag for detailed output.
+
 ## Output Structure
 
 Screenshots are written to the configured `output_dir`:
